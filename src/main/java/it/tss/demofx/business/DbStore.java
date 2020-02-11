@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +25,6 @@ public class DbStore {
     private static final String URL = "jdbc:mariadb://localhost:3306/songs";
     private static final String USR = "tss";
     private static final String PWD = "ghiglieno";
-    
-
 
     public static void saveNewSong(String titolo, String artista, String album) {
         try (Connection cn = DriverManager.getConnection(URL, USR, PWD); PreparedStatement pcmd = cn.prepareStatement("INSERT INTO song (title, artist, album) "
@@ -55,5 +54,15 @@ public class DbStore {
         }
     }
 
+    public static ArrayList viewAllSongs() throws SQLException {
+        ArrayList<Songs> canzoni = new ArrayList<>();
+        Connection cn = DriverManager.getConnection(URL, USR, PWD);
+        PreparedStatement pcmd = cn.prepareStatement("SELECT title,author,album FROM t_canzoni");
+        ResultSet ris = pcmd.executeQuery();
+        while (ris.next()) {
+            canzoni.add(new Songs(ris.getString("title"), ris.getString("author"), ris.getString("album")));
+        }
+        return canzoni;
+    }
 
 }

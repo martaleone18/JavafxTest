@@ -55,7 +55,6 @@ public class MainController implements Initializable {
     public void onViewAll() throws IOException {
         Parent view = App.loadFXML("elenco");
         borderPane.setCenter(view);
-
     }
 
     public void onDelete() {

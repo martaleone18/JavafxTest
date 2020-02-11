@@ -19,57 +19,39 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import it.tss.demofx.business.DbStore;
+import java.sql.SQLException;
 import java.util.List;
-
 
 /**
  *
  * @author tss
  */
 public class ListSongController implements Initializable {
-    
+
     @FXML
-    private TableView table = new TableView();
+    TableView table = new TableView();
     @FXML
-    private TableColumn<String, Songs> columntitle;
+    TableColumn columntitle;
     @FXML
-    private TableColumn<String, Songs> columnauthor;
+    TableColumn columnauthor;
     @FXML
-    private TableColumn<String, Songs> columnalbum;
-    
-    private List<Songs> canzoni = new ArrayList<>();
-    
+    TableColumn columnalbum;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         System.out.println("initialize ListSongController....");
-        table.setEditable(true);
         columntitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         columnauthor.setCellValueFactory(new PropertyValueFactory<>("author"));
         columnalbum.setCellValueFactory(new PropertyValueFactory<>("album"));
-        table.getColumns().addAll("title", "author","album");
-        
-        
 
     }
 
-    
-   public List <Songs> viewAllSongs(String title, String author, String album){
-        canzoni = new ArrayList<Songs>();
-        try (Connection cn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/songs","tss","ghiglieno"); Statement cmd = cn.createStatement();) {
+    public void onShow() throws SQLException {
 
-            ResultSet rs = cmd.executeQuery("select * from song");
-            while (rs.next()) {
-                
-            }
-        } catch (Exception e) {
-            e.getMessage();
-        }
-        return canzoni;
+        DbStore.viewAllSongs().forEach(c -> table.getItems().add(c));
+        System.out.println("avviato");
+
     }
-        
-}  
-       
-    
 
+}
