@@ -26,12 +26,12 @@ public class DbStore {
     private static final String USR = "tss";
     private static final String PWD = "ghiglieno";
 
-    public static void saveNewSong(String titolo, String artista, String album) {
-        try (Connection cn = DriverManager.getConnection(URL, USR, PWD); PreparedStatement pcmd = cn.prepareStatement("INSERT INTO song (title, artist, album) "
+    public static void saveNewSong(String title, String author, String album) {
+        try (Connection cn = DriverManager.getConnection(URL, USR, PWD); PreparedStatement pcmd = cn.prepareStatement("INSERT INTO songs (title, author, album) "
                 + "VALUES (?, ?, ?)");) {
 
-            pcmd.setString(1, titolo);
-            pcmd.setString(2, artista);
+            pcmd.setString(1, title);
+            pcmd.setString(2, author);
             pcmd.setString(3, album);
             pcmd.executeUpdate();
             debugPrintAllSongs();
@@ -43,11 +43,11 @@ public class DbStore {
 
     private static void debugPrintAllSongs() {
         try (Connection cn = DriverManager.getConnection(URL, USR, PWD); Statement cmd = cn.createStatement();) {
-            ResultSet rs = cmd.executeQuery("select * from song");
+            ResultSet rs = cmd.executeQuery("select * from songs");
             while (rs.next()) {
-                System.out.println(rs.getInt("id") + ","
+                System.out.println(rs.getInt("id_canzone") + ","
                         + rs.getString("title")
-                        + "," + rs.getString("artist"));
+                        + "," + rs.getString("author"));
             }
         } catch (Exception e) {
             e.getMessage();
